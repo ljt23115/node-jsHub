@@ -1,4 +1,7 @@
+const fs = require('fs')
+const fileService = require("../service/file.service")
 const userService = require("../service/user.service")
+const { UPLOAD_PATH } = require("../config/path")
 
 class UserController {
   async create(ctx, next) {
@@ -15,7 +18,17 @@ class UserController {
     }
     await next()
   }
-  
+  async showAvatar(ctx, next) {
+
+    const { userId } = ctx.params
+
+    const avatarInfo = await fileService.queryAvatarWithUserId(userId)
+    
+    // 读取头像文件
+    const { filename, mimetype } = avatarInfo
+    ctx.type = mimetype
+    ctx.body = fs.createReadStream(`${UPLOAD_PATH}/${filename}`)
+  }
 }
 
 module.exports = new UserController()

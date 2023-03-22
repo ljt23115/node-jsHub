@@ -18,3 +18,5 @@ node_modules/
 
 # 忽略所有的 .env 文件
 .env
+
+uploads/
